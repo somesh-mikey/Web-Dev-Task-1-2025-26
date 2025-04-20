@@ -1,26 +1,28 @@
-# /users/register Endpoint Documentation
+# API Documentation
 
-This document describes the `/users/register` endpoint used to create a new user in the application.
+This document describes the `/users/register` and `/users/login` endpoints used in the application.
 
 ---
 
-## Description
+## /users/register Endpoint
+
+### Description
 
 The `/users/register` endpoint is a **POST** endpoint used to register a new user. It accepts user details in JSON format, validates the input, hashes the password, creates the user in the database, and returns an authentication token along with the user details.
 
 ---
 
-## Request
+### Request
 
-### URL
+#### URL
 
 - Replace `<PORT>` with the port your server is running on (default is `3000` if not specified).
 
-### Headers
+#### Headers
 
 - `Content-Type: application/json`
 
-### Body
+#### Body
 
 The request body should be in JSON format with the following structure:
 
@@ -37,7 +39,7 @@ The request body should be in JSON format with the following structure:
 
 ---
 
-## Response
+### Response
 
 The response will be in JSON format with the following structure:
 
@@ -45,13 +47,12 @@ The response will be in JSON format with the following structure:
 {
   "token": "yourAuthTokenHere",
   "user": {
-    "fullname":
-        "firstname",
-        "lastname"
-    "email"
-    "password"
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
   }
-  "token" (String): JWT Token
 }
 ```
 
@@ -62,5 +63,13 @@ In case of validation errors, the response will include an `errors` array:
   "errors": [
     // Array of validation error messages
   ]
+}
+```
+
+In case of invalid email or password, the response will include the following structure:
+
+```json
+{
+  "message": "Invalid email or password"
 }
 ```
