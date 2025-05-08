@@ -1,6 +1,6 @@
 # API Documentation
 
-This document describes the `/users/register` and `/users/login` endpoints used in the application.
+This document describes the `/users/register`, `/users/login`, `/users/profile`, and `/users/logout` endpoints used in the application.
 
 ---
 
@@ -71,5 +71,111 @@ In case of invalid email or password, the response will include the following st
 ```json
 {
   "message": "Invalid email or password"
+}
+```
+
+---
+
+## /users/profile Endpoint
+
+### Description
+
+The `/users/profile` endpoint is a **GET** endpoint that returns the authenticated user's profile information. This endpoint requires authentication using a JWT token.
+
+### Request
+
+#### URL
+
+```
+GET http://localhost:<PORT>/users/profile
+```
+
+#### Headers
+
+- `Authorization: Bearer <your-jwt-token>`
+  or
+- Cookie with `token=<your-jwt-token>`
+
+### Response
+
+#### Success Response (200 OK)
+
+```json
+{
+  "user": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com",
+    "_id": "user-id-here"
+  }
+}
+```
+
+#### Error Response (401 Unauthorized)
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+## /users/logout Endpoint
+
+### Description
+
+The `/users/logout` endpoint is a **GET** endpoint that invalidates the current JWT token and logs out the user. This endpoint requires authentication using a JWT token.
+
+### Request
+
+#### URL
+
+```
+GET http://localhost:<PORT>/users/logout
+```
+
+#### Headers
+
+- `Authorization: Bearer <your-jwt-token>`
+  or
+- Cookie with `token=<your-jwt-token>`
+
+### Response
+
+#### Success Response (200 OK)
+
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+#### Error Responses
+
+##### 401 Unauthorized
+
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+##### 400 Bad Request
+
+```json
+{
+  "message": "Token is required"
+}
+```
+
+##### 500 Internal Server Error
+
+```json
+{
+  "message": "Failed to log out",
+  "error": "Error message details"
 }
 ```

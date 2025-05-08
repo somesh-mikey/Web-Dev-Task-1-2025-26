@@ -1,4 +1,5 @@
 const userModel = require("../models/user.model");
+const blacklistTokenModel = require("../models/blacklistToken.model");
 
 module.exports.createUser = async ({
   firstname,
@@ -19,4 +20,13 @@ module.exports.createUser = async ({
   });
 
   return user;
+};
+
+module.exports.blacklistToken = async (token) => {
+  try {
+    await blacklistTokenModel.create({ token });
+    return { success: true };
+  } catch (error) {
+    throw new Error("Failed to blacklist token");
+  }
 };
