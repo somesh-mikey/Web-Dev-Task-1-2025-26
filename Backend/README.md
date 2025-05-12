@@ -1,6 +1,6 @@
 # API Documentation
 
-This document describes the `/users/register`, `/users/login`, `/users/profile`, and `/users/logout` endpoints used in the application.
+This document describes the `/users/register`, `/users/login`, `/users/profile`, `/users/logout`, and `/captains/register` endpoints used in the application.
 
 ---
 
@@ -61,7 +61,7 @@ In case of validation errors, the response will include an `errors` array:
 ```json
 {
   "errors": [
-    // Array of validation error messages
+    // List of validation error messages
   ]
 }
 ```
@@ -177,5 +177,107 @@ GET http://localhost:<PORT>/users/logout
 {
   "message": "Failed to log out",
   "error": "Error message details"
+}
+```
+
+---
+
+## /captains/register Endpoint
+
+### Description
+
+The `/captains/register` endpoint is a **POST** endpoint used to register a new captain. It accepts captain details in JSON format, validates the input, hashes the password, creates the captain in the database, and returns an authentication token along with the captain details.
+
+> This endpoint is implemented in [`routes/captain.routes.js`](c:\Users\Somesh Das\Documents\Frontend Batch\Projects\Uber Video\Backend\routes\captain.routes.js) and signed using methods from [`models/captain.model.js`](c:\Users\Somesh Das\Documents\Frontend Batch\Projects\Uber Video\Backend\models\captain.model.js) after processing by [`services/captain.service.js`](c:\Users\Somesh Das\Documents\Frontend Batch\Projects\Uber Video\Backend\services\captain.service.js).
+
+### Request
+
+#### URL
+
+```
+POST http://localhost:<PORT>/captains/register
+```
+
+#### Headers
+
+- `Content-Type: application/json`
+
+#### Body
+
+The request body should include the following fields:
+
+- `fullname`: An object containing:
+  - `firstname` (string, at least 3 characters)
+  - `lastname` (string)
+- `email`: A valid email address.
+- `password`: A string with a minimum of 6 characters.
+- `vehicle`: An object containing:
+  - `color` (string, at least 3 characters)
+  - `plate` (string, at least 3 characters)
+  - `capacity` (number)
+  - `vehicleType` (string, at least 3 characters)
+
+Example body:
+
+```json
+{
+  "fullname": {
+    "firstname": "Alice",
+    "lastname": "Smith"
+  },
+  "email": "alice.smith@example.com",
+  "password": "password123",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+---
+
+### Response
+
+The response will be in JSON format with the following structure:
+
+```json
+{
+  "token": "yourAuthTokenHere",
+  "captain": {
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com"
+    // other captain details
+  }
+}
+```
+
+In case of validation errors, the response will include an `errors` array:
+
+```json
+{
+  "errors": [
+    // List of validation error messages
+  ]
+}
+```
+
+In case of invalid email or password, the response will include the following structure:
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+In case the captain already exists, the response will include the following structure:
+
+```json
+{
+  "message": "Captain already exists"
 }
 ```

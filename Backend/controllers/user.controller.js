@@ -11,11 +11,19 @@ module.exports.registerUser = async (req, res, next) => {
   console.log(req.body);
   const { fullname, email, password } = req.body;
 
+  const isUserAlreadyExists = await userModel.findOne({ email });
+  if (isUserAlreadyExists) {
+    return res.status(409).json({ message: "User already exists" });
+  }
+
+  // Split fullname into firstname and lastname
+  const [firstname, lastname] = fullname.split(" ");
+
   // Call hashPassword as a static method
   const hashedPassword = await userModel.hashPassword(password);
   const user = await userService.createUser({
-    firstname: fullname.firstname,
-    lastname: fullname.lastname,
+    firstname,
+    lastname,
     email,
     password: hashedPassword,
   });
@@ -54,7 +62,7 @@ module.exports.getUserProfile = async (req, res, next) => {
 };
 
 module.exports.logoutUser = async (req, res) => {
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
   if (!token) {
     return res.status(400).json({ message: "Token is required" });
   }

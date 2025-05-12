@@ -4,6 +4,7 @@ const express = require("express");
 const app = express();
 const connecttoDB = require("./db/db");
 const userRoutes = require("./routes/user.routes");
+const captainRoutes = require("./routes/captain.routes");
 const cookieparser = require("cookie-parser");
 
 connecttoDB(); // Connect to MongoDB
@@ -17,5 +18,7 @@ app.use("/users", userRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+app.use("/captains", captainRoutes); // Register captain routes with the '/captains' prefix
 
 module.exports = app;
