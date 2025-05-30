@@ -6,11 +6,20 @@ const connecttoDB = require("./db/db");
 const userRoutes = require("./routes/user.routes");
 const captainRoutes = require("./routes/captain.routes");
 const cookieparser = require("cookie-parser");
+const cors = require("cors");
 
 connecttoDB(); // Connect to MongoDB
 app.use(express.json()); // Middleware to parse JSON requests
 app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded requests
 app.use(cookieparser()); // Middleware to parse cookies
+
+// Enable CORS allowing requests from your frontend
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow requests from your frontend
+    credentials: true,
+  })
+);
 
 // Register user routes with the '/users' prefix
 app.use("/users", userRoutes);

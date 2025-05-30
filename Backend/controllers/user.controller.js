@@ -16,8 +16,8 @@ module.exports.registerUser = async (req, res, next) => {
     return res.status(409).json({ message: "User already exists" });
   }
 
-  // Split fullname into firstname and lastname
-  const [firstname, lastname] = fullname.split(" ");
+  // Destructure firstname and lastname from fullname object
+  const { firstname, lastname } = fullname;
 
   // Call hashPassword as a static method
   const hashedPassword = await userModel.hashPassword(password);

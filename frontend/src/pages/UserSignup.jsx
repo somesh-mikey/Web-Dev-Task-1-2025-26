@@ -1,24 +1,46 @@
-import { set } from "mongoose";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { UserDataContext } from "../context/userContext";
+
 const UserSignup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [userData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
 
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const { User, setUser } = useContext(UserDataContext);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setUserData({
+    const newUser = {
       email: email,
       password: password,
       fullname: {
-        firstName: firstName,
-        lastName: lastName,
+        firstname: firstName,
+        lastname: lastName,
       },
-    });
-    console.log("User Data:", userData);
+    };
+
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/users/register`,
+        newUser
+      );
+      if (response.status === 201) {
+        const data = response.data;
+
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
     setEmail("");
     setFirstName("");
     setLastName("");
@@ -87,7 +109,7 @@ const UserSignup = () => {
             type="submit"
             className="bg-[#111] hover:bg-[#222] text-white rounded px-4 py-2 w-full text-lg font-semibold transition"
           >
-            Login
+            Create Account
           </button>
           <div className="w-full">
             <p className="text-[10px]">
