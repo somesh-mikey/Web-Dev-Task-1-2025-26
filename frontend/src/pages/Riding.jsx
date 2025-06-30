@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Map from "../components/Map";
 
 const Riding = () => {
   return (
@@ -11,11 +12,7 @@ const Riding = () => {
         <i className="text-lg font-medium" class="ri-home-5-line"></i>
       </Link>
       <div className="h-1/2">
-        <img
-          className="h-full w-full object-cover"
-          src="images/Map.png"
-          alt=""
-        />
+        <Map />
       </div>
       <div className="h-1/2 p-4">
         <div className="flex items-center justify-between">

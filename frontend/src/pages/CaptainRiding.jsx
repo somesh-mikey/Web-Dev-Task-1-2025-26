@@ -4,6 +4,7 @@ import FinishRide from "../components/FinishRide";
 // If you use GSAP and useGSAP, make sure to import them
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
+import Map from "../components/Map"; // Import the Map component
 
 const CaptainRiding = () => {
   const [finishRidePanel, setFinishRidePanel] = useState(false);
@@ -40,11 +41,7 @@ const CaptainRiding = () => {
         </Link>
       </div>
       <div className="h-4/5">
-        <img
-          className="h-full w-full object-cover"
-          src="images/Map.png"
-          alt=""
-        />
+        <Map />
       </div>
       <div
         className="h-1/5 p-6 items-center justify-between relative bg-yellow-400"

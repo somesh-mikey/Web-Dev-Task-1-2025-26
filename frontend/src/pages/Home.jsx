@@ -1,4 +1,4 @@
-import React, { use, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -7,6 +7,7 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmedRide from "../components/ConfirmedRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingforDriver from "../components/WaitingforDriver";
+import Map from "../components/Map";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -131,6 +132,7 @@ const Home = () => {
     },
     [waitingForDriver]
   );
+
   return (
     <div className="h-screen relative overflow-header">
       <img
@@ -138,16 +140,13 @@ const Home = () => {
         src="/images/Logo1.png"
         alt="Logo"
       />
+      {/* Map as background */}
       <div className="h-screen w-screen absolute top-0 left-0 z-0">
-        {/*image for temporary use*/}
-        <img
-          className="h-full w-full object-cover"
-          src="/images/Map.png"
-          alt="Map"
-        />
+        <Map />
       </div>
-      <div className="flex flex-col justify-end h-screen absolute top-0 w-full z-10">
-        <div className="h-[30%] p-6 bg-white/90 relative">
+      {/* Panels and overlays above the map */}
+      <div className="flex flex-col justify-end h-screen absolute top-0 w-full z-10 pointer-events-none">
+        <div className="h-[30%] p-6 bg-white/90 relative pointer-events-auto">
           <h5
             ref={panelCloseRef}
             onClick={() => {
@@ -178,47 +177,45 @@ const Home = () => {
             />
           </form>
         </div>
-        <div ref={panelRef} className=" bg-white h-0">
+        <div ref={panelRef} className="bg-white h-0 pointer-events-auto">
           <LocationSearchPanel
             panelOpen={panelOpen}
             setpanelOpen={setpanelOpen}
             vehiclePanel={vehiclePanel}
             setvehiclePanel={setvehiclePanel}
-          ></LocationSearchPanel>
+          />
         </div>
       </div>
       <div
         ref={vechiclePanelRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14"
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14 pointer-events-auto"
       >
         <VehiclePanel
           setConfirmedRidePanel={setConfirmedRidePanel}
           setvehiclePanel={setvehiclePanel}
-        ></VehiclePanel>
+        />
       </div>
       <div
         ref={confirmedRidePanelRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14"
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14 pointer-events-auto"
       >
         <ConfirmedRide
           setConfirmedRidePanel={setConfirmedRidePanel}
           setvehiclePanel={setvehiclePanel}
           setVehicleFound={setVehicleFound}
-        ></ConfirmedRide>
+        />
       </div>
       <div
         ref={vehicleFoundRef}
-        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14"
+        className="fixed w-full z-10 bottom-0 translate-y-full bg-white p-3 px-3 py-10 pt-14 pointer-events-auto"
       >
-        <LookingForDriver setVehicleFound={setVehicleFound}></LookingForDriver>
+        <LookingForDriver setVehicleFound={setVehicleFound} />
       </div>
       <div
         ref={WaitingForDriverRef}
-        className="fixed w-full z-10 bottom-0 bg-white p-3 px-3 py-10 pt-14"
+        className="fixed w-full z-10 bottom-0 bg-white p-3 px-3 py-10 pt-14 pointer-events-auto"
       >
-        <WaitingforDriver
-          waitingForDriver={waitingForDriver}
-        ></WaitingforDriver>
+        <WaitingforDriver waitingForDriver={waitingForDriver} />
       </div>
     </div>
   );

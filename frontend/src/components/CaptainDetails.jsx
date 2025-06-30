@@ -3,7 +3,7 @@ import React from "react";
 const CaptainDetails = () => {
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center z-10 justify-between">
         <div className="flex items-center justify-start gap-3">
           <img
             className="h-10 w-10 rounded-full object-cover"
