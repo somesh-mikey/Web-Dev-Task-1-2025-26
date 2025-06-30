@@ -8,6 +8,7 @@ const captainRoutes = require("./routes/captain.routes");
 const cookieparser = require("cookie-parser");
 const cors = require("cors");
 const mapsRoutes = require("./routes/maps.routes");
+const rideRoutes = require("./routes/ride.routes");
 
 connecttoDB(); // Connect to MongoDB
 app.use(express.json()); // Middleware to parse JSON requests
@@ -31,5 +32,6 @@ app.get("/", (req, res) => {
 
 app.use("/captains", captainRoutes); // Register captain routes with the '/captains' prefix
 app.use("/maps", mapsRoutes); // Register map routes with the '/maps' prefix
+app.use("/rides", rideRoutes); // Register ride routes with the '/rides' prefix
 
 module.exports = app;
