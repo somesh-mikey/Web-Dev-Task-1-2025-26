@@ -15,6 +15,7 @@ import CaptainLogout from "./pages/CaptainLogout";
 import Riding from "./pages/Riding";
 import CaptainRiding from "./pages/CaptainRiding";
 import "remixicon/fonts/remixicon.css";
+import FinishRide from "./components/FinishRide";
 
 const App = () => {
   const ans = useContext(UserDataContext);
@@ -62,6 +63,14 @@ const App = () => {
             <CaptainProtectWrapper>
               <CaptainLogout />
             </CaptainProtectWrapper>
+          }
+        />
+        <Route
+          path="/finish-ride"
+          element={
+            <UserProtectedWrapper>
+              <FinishRide />
+            </UserProtectedWrapper>
           }
         />
       </Routes>

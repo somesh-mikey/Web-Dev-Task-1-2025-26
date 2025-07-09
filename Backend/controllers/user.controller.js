@@ -77,3 +77,32 @@ module.exports.logoutUser = async (req, res) => {
       .json({ message: "Failed to log out", error: error.message });
   }
 };
+
+module.exports.signup = async (req, res) => {
+  try {
+    const { email, password, fullname } = req.body;
+    if (!fullname || !fullname.firstname || !fullname.lastname) {
+      return res.status(400).json({ message: "Full name is required" });
+    }
+    const user = await userModel.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+    const hashedPassword = await userModel.hashPassword(password);
+
+    // Use the service to create the user, enforcing correct structure
+    const newUser = await userService.createUser({
+      firstname: fullname.firstname,
+      lastname: fullname.lastname,
+      email,
+      password: hashedPassword,
+    });
+
+    res.status(201).json({ user: newUser });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+

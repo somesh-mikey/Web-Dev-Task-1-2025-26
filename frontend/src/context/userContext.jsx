@@ -1,24 +1,31 @@
-import React, { createContext } from "react";
-import { useState } from "react";
+import React, { createContext, useState, useEffect } from 'react'
 
-export const UserDataContext = createContext();
+export const UserDataContext = createContext()
 
-const userContext = ({ children }) => {
-  const [User, setUser] = useState({
-    email: "",
-    fullname: {
-      firstName: "",
-      lastName: "",
-    },
+export const UserDataProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
   });
 
-  return (
-    <div>
-      <UserDataContext.Provider value={{ User, setUser }}>
-        {children}
-      </UserDataContext.Provider>
-    </div>
-  );
-};
+  useEffect(() => {
+    if (
+      user &&
+      (typeof user !== "object" || !user._id || typeof user._id !== "string")
+    ) {
+      setUser(null);
+      localStorage.removeItem("user");
+      console.error("Corrupted user found in context/localStorage, clearing.");
+    }
+  }, [user]);
 
-export default userContext;
+  return (
+    <UserDataContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserDataContext.Provider>
+  )
+}

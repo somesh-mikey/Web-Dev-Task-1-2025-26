@@ -1,4 +1,7 @@
 const axios = require("axios");
+const captainModel = require("../models/captain.model");
+const { query } = require("express-validator");
+const mapService = require("../services/maps.services");
 
 /**
  * Get coordinates (latitude and longitude) for a given address using OpenStreetMap Nominatim API.
@@ -40,6 +43,7 @@ module.exports.getDistanceTime = async (origin, destination) => {
   if (!origin || !destination) {
     throw new Error("Origin and destination are required");
   }
+  console.log("Origin:", origin, "Destination:", destination); // Add this line
 
   const getCoords = async (address) => {
     const response = await axios.get(
@@ -53,7 +57,7 @@ module.exports.getDistanceTime = async (origin, destination) => {
         headers: {
           "User-Agent": "Uber-Video-App/1.0 (someshdasbb07@gmail.com)",
         },
-        timeout: 5000, // 5 seconds timeout
+        timeout: 15000, // Increase to 15 seconds
       }
     );
     if (response.data && response.data.length > 0) {
@@ -87,7 +91,7 @@ module.exports.getDistanceTime = async (origin, destination) => {
           Authorization: process.env.ROUTING_API_KEY,
           "Content-Type": "application/json",
         },
-        timeout: 10000,
+        timeout: 20000, // Increase to 20 seconds
       }
     );
 
@@ -157,4 +161,20 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     console.error("Error fetching suggestions:", error.message);
     throw new Error("Failed to fetch suggestions");
   }
+};
+
+module.exports.getCaptainsInTheRadius = async (lat, lng, radius) => {
+  const latDelta = radius / 111.32; // radius in kilometers
+  const lngDelta = radius / (111.32 * Math.cos((lat * Math.PI) / 180));
+
+  const query = {
+    "location.lat": { $gte: lat - latDelta, $lte: lat + latDelta },
+    "location.lng": { $gte: lng - lngDelta, $lte: lng + lngDelta },
+  };
+  console.log("Captain search query:", query);
+
+  const captains = await captainModel.find(query);
+  console.log("Captains found:", captains);
+
+  return captains;
 };

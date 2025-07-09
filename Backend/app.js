@@ -9,6 +9,7 @@ const cookieparser = require("cookie-parser");
 const cors = require("cors");
 const mapsRoutes = require("./routes/maps.routes");
 const rideRoutes = require("./routes/ride.routes");
+const userModel = require("./models/user.model");
 
 connecttoDB(); // Connect to MongoDB
 app.use(express.json()); // Middleware to parse JSON requests
@@ -18,7 +19,10 @@ app.use(cookieparser()); // Middleware to parse cookies
 // Enable CORS allowing requests from your frontend
 app.use(
   cors({
-    origin: "http://localhost:5173", // Allow requests from your frontend
+    origin: [
+      "http://localhost:5173",
+      "https://35f7ghpf-5173.inc1.devtunnels.ms",
+    ], // Allow requests from your frontend
     credentials: true,
   })
 );

@@ -1,6 +1,12 @@
 import React from "react";
+// Format distance in meters/kilometers
+const formatDistance = (meters) => {
+  if (typeof meters !== 'number' || isNaN(meters)) return '';
+  return meters >= 1000 ? `${(meters / 1000).toFixed(2)} km` : `${meters} m`;
+};
 
 const RidePopUp = (props) => {
+  console.log("RidePopUp received ride:", props.ride);
   return (
     <div>
       <h5
@@ -17,34 +23,38 @@ const RidePopUp = (props) => {
             src="images/Woman.jpg"
             alt=""
           />
-          <h2 className="text-xl font-medium">Seong Hu</h2>
+          <h2 className="text-xl font-medium">
+            {props.ride?.user.fullname.firstname +
+              " " +
+              props.ride?.user.fullname.lastname}
+          </h2>
         </div>
-        <h5 className="text-lg font-semibold">2.2 Km</h5>
+        <h5 className="text-lg font-semibold">{formatDistance(props.ride?.distance)}</h5>
       </div>
       <div className="flex gap-2 justify-between flex-col items-center">
         <div className="w-full mt-5">
           <div className="flex items-center gap-2 p-3 border-b-2">
             <i className="ri-map-pin-user-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
+              <h3 className="text-lg font-medium">Pickup Location</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Ahmedabad
+                {props.ride?.pickup}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 p-3 border-b-2">
             <i className="ri-map-pin-2-fill"></i>
             <div>
-              <h3 className="text-lg font-medium">562/11-A</h3>
+              <h3 className="text-lg font-medium">Destination</h3>
               <p className="text-sm -mt-1 text-gray-600">
-                Kankariya Talab, Ahmedabad
+                {props.ride?.destination}
               </p>
             </div>
           </div>
           <div className="flex items-center gap-2 p-3">
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className="text-lg font-medium">₹193.20</h3>
+              <h3 className="text-lg font-medium">₹{props.ride?.fare}</h3>
               <p className="text-sm -mt-1 text-gray-600">Cash Cash</p>
             </div>
           </div>
@@ -60,8 +70,7 @@ const RidePopUp = (props) => {
           </button>
           <button
             onClick={() => {
-              props.setShowRidePopUp(false);
-              props.setShowConfirmRidePopUp(true);
+              props.confirmRide(props.ride);
             }}
             className="mt-5 bg-green-600 text-white font-semibold p-3 px-10 rounded-lg"
           >

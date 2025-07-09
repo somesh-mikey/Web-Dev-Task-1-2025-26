@@ -9,7 +9,11 @@ module.exports.registerCaptain = async (req, res, next) => {
     return res.status(422).json({ errors: errors.array() });
   }
   console.log(req.body);
-  const { fullname, email, password, vehicle } = req.body;
+  const { email, password, fullname, vehicle } = req.body;
+
+  if (!email || !password || !fullname || !fullname.firstname || !fullname.lastname) {
+    return res.status(400).json({ message: "Email, password, firstname, and lastname are required" });
+  }
 
   const isCaptainAlreadyExists = await captainModel.findOne({ email });
   if (isCaptainAlreadyExists) {

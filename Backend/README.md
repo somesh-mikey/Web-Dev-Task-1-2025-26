@@ -1,6 +1,6 @@
 # API Documentation
 
-This document describes the `/users/register`, `/users/login`, `/users/profile`, `/users/logout`, and `/captains/register` endpoints used in the application.
+This document describes the `/users/register`, `/users/login`, `/users/profile`, `/users/logout`, `/captains/register`, and `/rides/get-fare` endpoints used in the application.
 
 ---
 
@@ -279,5 +279,67 @@ In case the captain already exists, the response will include the following stru
 ```json
 {
   "message": "Captain already exists"
+}
+```
+
+---
+
+## /rides/get-fare Endpoint
+
+### Description
+
+The `/rides/get-fare` endpoint is a **GET** endpoint that calculates and returns the estimated fare for a ride based on the pickup location, destination, and vehicle type. This endpoint requires authentication using a JWT token.
+
+---
+
+### Request
+
+#### URL
+
+```
+GET http://localhost:<PORT>/rides/get-fare?pickup=<pickup>&destination=<destination>&vehicleType=<vehicleType>
+```
+
+#### Headers
+
+- `Authorization: Bearer <your-jwt-token>`
+  or
+- Cookie with `token=<your-jwt-token>`
+
+#### Query Parameters
+
+- `pickup`: The pickup location (string, required)
+- `destination`: The destination location (string, required)
+- `vehicleType`: The type of vehicle (`car`, `motorcycle`, or `three-wheeler`, required)
+
+---
+
+### Response
+
+#### Success Response (200 OK)
+
+```json
+{
+  "fare": 193
+}
+```
+
+#### Error Responses
+
+- **422 Unprocessable Entity**: Validation errors in the query parameters.
+- **500 Internal Server Error**: If there is a server error calculating the fare.
+
+```json
+{
+  "errors": [
+    // List of validation error messages
+  ]
+}
+```
+
+```json
+{
+  "message": "Internal server error",
+  "error": "Error message details"
 }
 ```

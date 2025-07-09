@@ -1,12 +1,19 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FinishRide from "../components/FinishRide";
 // If you use GSAP and useGSAP, make sure to import them
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import Map from "../components/Map"; // Import the Map component
+// Format distance in meters/kilometers
+const formatDistance = (meters) => {
+  if (typeof meters !== 'number' || isNaN(meters)) return '';
+  return meters >= 1000 ? `${(meters / 1000).toFixed(2)} km` : `${meters} m`;
+};
 
 const CaptainRiding = () => {
+  const location = useLocation();
+  const ride = location.state?.ride;
   const [finishRidePanel, setFinishRidePanel] = useState(false);
   const [showRidePopUp, setShowRidePopUp] = useState(false); // Added missing state
   const finishRidePanelRef = useRef(null);
@@ -54,7 +61,7 @@ const CaptainRiding = () => {
           {" "}
           <i className="text-3xl text-gray-800 ri-arrow-up-wide-line"></i>
         </h5>
-        <h4 className="text-xl font-semibold">4 KM away</h4>
+        <h4 className="text-xl font-semibold">{formatDistance(ride?.distance)} away</h4>
         <button
           className="mt-5 bg-green-600 text-white font-semibold p-3 px-10 rounded-lg"
           onClick={() => setShowRidePopUp(true)}
